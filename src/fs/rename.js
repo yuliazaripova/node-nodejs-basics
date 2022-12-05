@@ -1,20 +1,23 @@
 import { rename as renameFs, access } from 'node:fs/promises';
+import FSError from '../error/error.js';
 
 const checkFileExists = async (file) => {
-    return await access(file, fs.constants.F_OK)
-             .then(() => true)
-             .catch(() => false)
+    try {
+        await access(file);
+        return true
+    } catch (error) {
+        return false
+    }
   }
 
 const rename = async () => {
     try {
-        const des = './src/fs/files/fileToRead.txt';
+       const des = './src/fs/files/properFilename.md';
        const isExist = await checkFileExists(des);
        if (isExist) throw new Error()
-       await renameFs('./src/fs/files/hello.txt', des)
+       await renameFs('./src/fs/files/wrongFilename.txt', des)
     }  catch (err) { 
-    
-       throw new Error("111111"); 
+       throw new FSError(); 
      } 
 };
 
