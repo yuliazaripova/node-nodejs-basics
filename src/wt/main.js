@@ -17,8 +17,9 @@ const performCalculations = async () => {
     const numOfCpus = os.cpus().length;
     await Promise.allSettled(
         Array.from({ length: numOfCpus }, async (v, i) => await runService((10 + i)))
-    ).
-         then((results) => console.log(results));
+            ).then((results) => console.log(results.map(i => {
+               return i.status === 'fulfilled' ? { status: 'resolved', data: i.value } : { status: 'error', data: null }
+            })));
 };
 
 await performCalculations();
